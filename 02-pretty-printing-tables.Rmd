@@ -56,7 +56,7 @@ educ = educ %>%
     )
 ```
 
-## Summary Statistics Table
+## Summary Statistics Table {-}
 
 Say we wanted to produce a table of means and standard deviations for the variables: `peer`, `doc_accept`, and `enroll`. Furthermore, we want these for both the raw (untransformed) and log-transformed versions of these variables. Here is a sketch of what the table should look like:
 
@@ -128,7 +128,7 @@ kable(
 ```
 
 
-## Correlation Table
+## Correlation Table {-}
 
 For our second example, say we wanted to produce a table of pairwise correlations for the variables: `peer`, `doc_accept`, and `enroll`. To begin we will again set up a data frame, but this time we will generate it using functions from the **corrr** package.
 
@@ -173,7 +173,7 @@ tab_02 %>%
 ```
 
 
-## Regression Table: Single Model
+## Regression Table: Single Model {-}
 
 It is common to report the coefficient-level information from a fitted regression model in a table. The nice thing about using the `tidy()` function to obtain coefficient-level information from a fitted model is that the output is formatted as a data frame. Thus, we can use the output from `tidy()` directly in the `kable()` function. Below I fit a regression model and then use piping to obtain the coefficient-level information and create the table.
 
@@ -231,7 +231,7 @@ lm(peer ~ 1 + doc_accept + gre_verbal, data = educ) %>%
 
 
 
-## Regression Table: Multiple Models
+## Regression Table: Multiple Models {-}
 
 There are several specific packages that help us create tables of regression results. The [Stargazer package](https://cran.r-project.org/web/packages/stargazer/vignettes/stargazer.pdf), the [texreg package](https://cran.r-project.org/web/packages/texreg/vignettes/texreg.pdf) and the [finalfit package](http://www.datasurg.net/2018/05/16/elegant-regression-results-tables-and-plots-the-finalfit-package/) are but a few of these.
 

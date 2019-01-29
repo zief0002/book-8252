@@ -34,7 +34,7 @@ Read the following:
 
 
 
-## Notes {-}
+## Notes
 
 The notes and files you will need can be found at:
 
@@ -46,7 +46,7 @@ knitr::include_url("http://www.datadreaming.org/files/epsy-8252-rmarkdown/index.
 ```
 
 
-## Other Resources {-}
+## Other Resources
 
 In addition to the notes and what we cover in class, there many other resources for learning about R Markdown. Here are some resources that may be helpful in that endeavor:
 
