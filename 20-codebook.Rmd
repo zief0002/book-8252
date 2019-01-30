@@ -38,7 +38,7 @@ This file contains data collected from student evaluations of instructors' beaut
 These source of these data is: Hamermesh, D. S. &amp; Parker, A. M. (2005). Beauty in the classroom: Instructors' pulchritude and putative pedagogical productivity. *Economics of Education Review, 24*, 369&ndash;376. The data were made available by: Gelman, A., &amp; Hill, J. (2007). *Data analysis using regression and multilevel/hierarchical models*. New York: Cambridge University Press. 
 
 
-## fci-2015.csv {-#fci-2018}
+## fci-2015.csv {-#fci-2015}
 
 Each season, [Team Marketing Report (TMR)](http://www.teammarketing.com/) computes the cost of taking a family of four to a professional sports contest for each of the major sporting leagues. Costs are determined by telephone calls with representatives of the teams, venues and concessionaires. Identical questions were asked in all interviews. Prices for Canadian teams were converted to US dollars and comparison prices were converted using a recent exchange rate. Salary data were collected by Sporting Intelligence as part of their *Global Sports Salaries Survey 2015*.
 

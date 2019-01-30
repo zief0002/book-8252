@@ -35,8 +35,6 @@ opts_knit$set(width = 85)
 
 # Introduction {-}
 
-This website includes the notes for *EPsy 8252: Methods in Data Analysis for Educational Research II*. The course website, which includes the syllabus, assignments, etc. can be found at http://zief0002.github.io/epsy-8252/
+This website includes the notes for *EPsy 8252: Methods in Data Analysis for Educational Research II*. To download a ZIP file of the materials that make up this website (e.g., RMD files, HTML files) [click here](https://github.com/zief0002/book-8252/archive/master.zip) or visit the [github repository](https://github.com/zief0002/book-8252).
 
-
-
-
+The course website, which includes the syllabus, assignments, etc. can be found at http://zief0002.github.io/epsy-8252/
