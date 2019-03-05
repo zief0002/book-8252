@@ -5,12 +5,13 @@ date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: 
   bookdown::gitbook:
-    df_print: paged
+    df_print: default
 documentclass: book
 link-citations: yes
 github-repo: rstudio/bookdown-demo
 description: "These are the notes for EPsy 8252."
 new_session: yes
+always_allow_html: yes
 bibliography: [epsy8251.bib, epsy8252.bib]
 csl: apa-single-spaced.csl
 ---
