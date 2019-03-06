@@ -25,14 +25,14 @@
 <meta name="author" content="Andrew Zieffler">
 
 
-<meta name="date" content="2019-02-05">
+<meta name="date" content="2019-03-06">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="lmer-cross-sectional.html">
+<link rel="prev" href="lmer-longitudinal.html">
 <link rel="next" href="references.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -48,8 +48,6 @@
 
 
 
-<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
-<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 
 
@@ -280,21 +278,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="9" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html"><i class="fa fa-check"></i><b>9</b> Linear Mixed-Effects Models: Cross-Sectional Analysis</a><ul>
 <li class="chapter" data-level="" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#preparation-8"><i class="fa fa-check"></i>Preparation</a></li>
-<li class="chapter" data-level="9.1" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#dataset-and-research-question-7"><i class="fa fa-check"></i><b>9.1</b> Dataset and Research Question</a></li>
-<li class="chapter" data-level="9.2" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#unconditional-random-intercepts-model"><i class="fa fa-check"></i><b>9.2</b> Unconditional Random Intercepts Model</a><ul>
-<li class="chapter" data-level="9.2.1" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#fitting-and-interpreting-the-model"><i class="fa fa-check"></i><b>9.2.1</b> Fitting and Interpreting the Model</a></li>
-<li class="chapter" data-level="9.2.2" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#partitioning-unexplained-variation"><i class="fa fa-check"></i><b>9.2.2</b> Partitioning Unexplained Variation</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#including-student-level-predictors"><i class="fa fa-check"></i><b>9.3</b> Including Student-Level Predictors</a><ul>
-<li class="chapter" data-level="9.3.1" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#evaluating-predictors"><i class="fa fa-check"></i><b>9.3.1</b> Evaluating Predictors</a></li>
+<li class="chapter" data-level="10" data-path="lmer-assumptions.html"><a href="lmer-assumptions.html"><i class="fa fa-check"></i><b>10</b> Linear Mixed-Effects Models: Alternative Representations and Assumptions</a><ul>
+<li class="chapter" data-level="" data-path="lmer-assumptions.html"><a href="lmer-assumptions.html#preparation-9"><i class="fa fa-check"></i>Preparation</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#including-student-level-controls"><i class="fa fa-check"></i><b>9.4</b> Including Student-Level Controls</a></li>
-<li class="chapter" data-level="9.5" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#including-school-level-controls"><i class="fa fa-check"></i><b>9.5</b> Including School-Level Controls</a></li>
-<li class="chapter" data-level="9.6" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#displaying-the-results-of-the-fitted-models"><i class="fa fa-check"></i><b>9.6</b> Displaying the Results of the Fitted Models</a><ul>
-<li class="chapter" data-level="9.6.1" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#table-of-fitted-models"><i class="fa fa-check"></i><b>9.6.1</b> Table of Fitted Models</a></li>
-<li class="chapter" data-level="9.6.2" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#plot-of-final-models"><i class="fa fa-check"></i><b>9.6.2</b> Plot of “Final” Model(s)</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="lmer-cross-sectional.html"><a href="lmer-cross-sectional.html#other-resources-3"><i class="fa fa-check"></i>Other Resources</a></li>
+<li class="chapter" data-level="11" data-path="lmer-longitudinal.html"><a href="lmer-longitudinal.html"><i class="fa fa-check"></i><b>11</b> Linear Mixed-Effects Models: Longitudinal Analysis</a><ul>
+<li class="chapter" data-level="" data-path="lmer-longitudinal.html"><a href="lmer-longitudinal.html#preparation-10"><i class="fa fa-check"></i>Preparation</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html"><i class="fa fa-check"></i>Data Codebooks</a><ul>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#ed-schools-2018"><i class="fa fa-check"></i>ed-schools-2018.csv</a></li>
@@ -306,6 +295,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#netherlands"><i class="fa fa-check"></i>netherlands-students.csv and netherlands-schools.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#popular"><i class="fa fa-check"></i>popular-classroom.csv and popular-student.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#riverview"><i class="fa fa-check"></i>riverview.csv</a></li>
+<li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#vocabulary"><i class="fa fa-check"></i>vocabulary.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#wine"><i class="fa fa-check"></i>wine.csv</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -399,6 +389,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>age</code>: Age of the movie; Computed by subtracting the movie’s release date from 2019</li>
 <li><code>mpaa</code>: MPAA rating (PG, PG-13, R)</li>
 </ul>
+<!-- ## movies-2020.csv {-#movies} -->
+<!-- The data in *movies.csv* includes attributes for $n=1,584$ movies. These data are a subset of data from the `movies` data object included in the **ggplot2movies** package. The original data contains information on 24 variables collected from 28,819 movies. The attributes in this sample include: -->
+<!-- - `title`: Movie's title -->
+<!-- - `budget`: Movie's budget (in millions of U.S. dollars); adjusted to 2018 dollars -->
+<!-- - `year`: Release date of the movie -->
+<!-- - `age`: Age of the movie; Computed by subtracting the movie's release date from 2019 -->
+<!-- - `genre`: Movie genre (Action, Comedy, Drama, Other) -->
+<!-- - `length`: Running time of the movie (in minutes) -->
 </div>
 <div id="nba" class="section level2 unnumbered">
 <h2>nba-player-data.csv and nba-team-data.csv</h2>
@@ -433,6 +431,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li><code>school_id</code>: The school ID number</li>
 <li><code>school_type</code>: Indicates whether the school is a public school, a Protestant private school, a Catholic private school, or a non-denominational private school</li>
+<li><code>public</code>: Indicates whether the school is a public school (1) or a private school (0)</li>
 <li><code>school_ses</code>: School’s average socio-economic status</li>
 <li><code>school_verbal_iq</code>: School’s average verbal IQ score</li>
 <li><code>school_minority</code>: Percentage of students at the school who are minority students</li>
@@ -468,6 +467,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>party</code>: Political party affiliation</li>
 </ul>
 </div>
+<div id="vocabulary" class="section level2 unnumbered">
+<h2>vocabulary.csv</h2>
+<p>The data, adapted from data provided by <span class="citation">Bock (<a href="#ref-Bock:1975">1975</a>)</span>, come from the Laboratory School of the University of Chicago and include scaled test scores across four grades from the vocabulary section of the Cooperative Reading Test for <span class="math inline">\(n=64\)</span> students. The attributes in the dataset include:</p>
+<ul>
+<li><code>id</code>: The subject ID number for each male</li>
+<li><code>vocab_08</code>: The scaled vocabulary test score in 8th grade</li>
+<li><code>vocab_09</code>: The scaled vocabulary test score in 9th grade</li>
+<li><code>vocab_10</code>: The scaled vocabulary test score in 10th grade</li>
+<li><code>vocab_11</code>: The scaled vocabulary test score in 11th grade</li>
+<li><code>female</code>: Dummy coded sex variable (0 = Male, 1 = Female)</li>
+</ul>
+</div>
 <div id="wine" class="section level2 unnumbered">
 <h2>wine.csv</h2>
 <p>The data in <em>wine.csv</em> includes data on 200 different wines. These data are a subset of a larger database (<span class="math inline">\(n = 6,613\)</span>) from <a href="https://www.wine.com/">wine.com</a>, one of the biggest e-commerce wine retailers in the U.S. It allows customers to buy wine according to any price range, grape variety, country of origin, etc. The data were made available at <a href="http://insightmine.com/bring-your-own-data-analyzing-wine-market/">http://insightmine.com/</a>. The attributes include:</p>
@@ -499,13 +510,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ref-Lewis-Beck:2016">
 <p>Lewis-Beck, C., &amp; Lewis-Beck, M. (2016). <em>Applied regression: An introduction</em> (2nd ed.). Thousand Oaks, CA: Sage.</p>
 </div>
+<div id="ref-Bock:1975">
+<p>Bock, R. (1975). <em>Multivariate statistical methods in behavioral research</em>. New York: McGraw-Hill.</p>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="lmer-cross-sectional.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="lmer-longitudinal.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

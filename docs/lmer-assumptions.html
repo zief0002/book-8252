@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Unit 4: Probability Distributions | EPsy 8252 Notes</title>
+  <title>Unit 10: Linear Mixed-Effects Models: Alternative Representations and Assumptions | EPsy 8252 Notes</title>
   <meta name="description" content="These are the notes for EPsy 8252.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Unit 4: Probability Distributions | EPsy 8252 Notes" />
+  <meta property="og:title" content="Unit 10: Linear Mixed-Effects Models: Alternative Representations and Assumptions | EPsy 8252 Notes" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Unit 4: Probability Distributions | EPsy 8252 Notes" />
+  <meta name="twitter:title" content="Unit 10: Linear Mixed-Effects Models: Alternative Representations and Assumptions | EPsy 8252 Notes" />
   
   <meta name="twitter:description" content="These are the notes for EPsy 8252." />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="log-transformations-some-final-thoughts.html">
-<link rel="next" href="maximum-likelihood-estimation.html">
+<link rel="prev" href="lmer-cross-sectional.html">
+<link rel="next" href="lmer-longitudinal.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -319,382 +319,255 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="probability-distributions" class="section level1">
-<h1><span class="header-section-number">Unit 4:</span> Probability Distributions</h1>
-<p>In this set of notes, you will learn about common probability distributions.</p>
+<div id="lmer-assumptions" class="section level1">
+<h1><span class="header-section-number">Unit 10:</span> Linear Mixed-Effects Models: Alternative Representations and Assumptions</h1>
+<!-- ```{r echo=FALSE, message=FALSE} -->
+<!-- library(knitr) -->
+<!-- library(kableExtra) -->
+<!-- opts_knit$set( -->
+<!--   width = 85, -->
+<!--   tibble.print_max = Inf -->
+<!--   ) -->
+<!-- opts_chunk$set( -->
+<!--   prompt = FALSE, -->
+<!--   comment = NA, -->
+<!--   message = FALSE, -->
+<!--   warning = FALSE, -->
+<!--   tidy = FALSE, -->
+<!--   fig.align = 'center', -->
+<!--   out.width = '50%' -->
+<!--   ) -->
+<!-- ``` -->
+<!-- In this set of notes, you will learn alternative ways of representing the linear mixed-effects model. You will also learn about the underlying assumptions for the linear mixed-effects model, as well as how to evaluate them empirically. -->
 <hr />
-<div id="preparation-3" class="section level3 unnumbered">
+<div id="preparation-9" class="section level3 unnumbered">
 <h3>Preparation</h3>
-<p>Before class you will need to do the following:</p>
+<p>Before class you will need to read the section on <strong>Residual Analysis</strong> in:</p>
 <ul>
-<li>Read Section 3.1.1: Probability Basics in Fox [Required Textbook]</li>
-<li><p>Read Sections 3.3.1–3.3.4 (Continuous Distributions) in Fox [Required Textbook]</p></li>
-<li><p>Refresh your knowledge about probability distributions by going though the <a href="https://www.khanacademy.org/math/probability/random-variables-topic">Kahn Academy: Random Variables and Probability Distributions</a> tutorial.</p></li>
+<li>Loy, A. (2014). <a href="https://www.jstatsoft.org/article/view/v056i05/v56i05.pdf">HLMdiag: A Suite of Diagnostics for Hierarchical Linear Models in R</a> <em>Journal of Statistical Software, 56</em>(5), 1–28.</li>
 </ul>
 <p><br /></p>
+<p>Focus on the graphical evaluations of the residuals being carried out in this section.</p>
 <hr />
-</div>
-<div id="dataset-and-research-question-2" class="section level2">
-<h2><span class="header-section-number">4.1</span> Dataset and Research Question</h2>
-<p>In this set of notes, we will not be using a specific dataset.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load libraries</span>
-<span class="kw">library</span>(broom)
-<span class="kw">library</span>(dplyr)
-<span class="kw">library</span>(ggplot2)
-<span class="kw">library</span>(readr)
-<span class="kw">library</span>(sm)
-<span class="kw">library</span>(tidyr)</code></pre>
-</div>
-<div id="normal-distribution" class="section level2">
-<h2><span class="header-section-number">4.2</span> Normal Distribution</h2>
-<p>The probability distribution of a normal distribution is mathematically defined as:</p>
-<p><span class="math display">\[
-p(x) = \frac{1}{\sigma\sqrt{2\pi}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]
-\]</span></p>
-<p>for <span class="math inline">\(-\infty \leq x \leq \infty\)</span>. Consider a normal distribution with a mean (<span class="math inline">\(\mu\)</span>) of 50, and a standard deviation (<span class="math inline">\(\sigma\)</span>) of 10. We can compute the probability density (<span class="math inline">\(p(x)\)</span>) for a particular <span class="math inline">\(x\)</span> value by using this equation. For example, the probability density for <span class="math inline">\(x=65\)</span> can be found using,</p>
-<p><span class="math display">\[
-p(65) = \frac{1}{10\sqrt{2\pi}}\exp\left[-\frac{(65-50)^2}{2\times10^2}\right] = 0.01295176
-\]</span></p>
-<p>Using R, we can carry out the computation,</p>
-<pre class="sourceCode r"><code class="sourceCode r">(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>(<span class="dv">10</span> <span class="op">*</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi))) <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span>(<span class="dv">225</span>) <span class="op">/</span><span class="st"> </span><span class="dv">200</span>)</code></pre>
-<pre><code>[1] 0.01295</code></pre>
-<p>There is also a more direct way to compute this using the <code>dnorm()</code> function. This function computes the density of <code>x</code> from a normal distribution with a specified <code>mean</code> and <code>sd</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dnorm</span>(<span class="dt">x =</span> <span class="dv">65</span>, <span class="dt">mean =</span> <span class="dv">50</span>, <span class="dt">sd =</span> <span class="dv">10</span>)</code></pre>
-<pre><code>[1] 0.01295</code></pre>
-<p>If we compute the density for several <span class="math inline">\(x\)</span> values and plot them, we get the familiar normal shape; the graphical depiction of the mathematical equation.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create dataset</span>
-fig_<span class="dv">01</span> =<span class="st"> </span><span class="kw">data.frame</span>(
-  <span class="dt">X =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">10</span>, <span class="dt">to =</span> <span class="dv">90</span>, <span class="dt">by =</span> <span class="fl">0.01</span>)
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">Y =</span> <span class="kw">dnorm</span>(<span class="dt">x =</span> X, <span class="dt">mean =</span> <span class="dv">50</span>, <span class="dt">sd =</span> <span class="dv">10</span>)
-    )
+<!-- ## Dataset and Research Question -->
+<!-- In this set of notes, we will use data from two files, the *netherlands-students.csv* file and the *netherlands-schools.csv* file (see the [data codebook](#netherlands) here). These data include student- and school-level attributes, respectively, for $n_i=2287$ 8th-grade students in the Netherlands. -->
+<!-- ```{r message=FALSE, paged.print=FALSE} -->
+<!-- # Load libraries -->
+<!-- library(AICcmodavg) -->
+<!-- library(broom) -->
+<!-- library(dplyr) -->
+<!-- library(ggplot2) -->
+<!-- library(lme4) #for fitting mixed-effects models -->
+<!-- library(readr) -->
+<!-- library(sm) -->
+<!-- library(tidyr) -->
+<!-- # Read in student-level data -->
+<!-- student_data = read_csv(file = "~/Documents/github/epsy-8252/data/netherlands-students.csv") -->
+<!-- # Read in school-level data -->
+<!-- school_data = read_csv(file = "~/Documents/github/epsy-8252/data/netherlands-schools.csv") -->
+<!-- # Join the two datasets together -->
+<!-- joined_data = left_join(student_data, school_data, by = "school_id") -->
+<!-- head(joined_data) -->
+<!-- ``` -->
+<!-- We will use these data to explore the question of whether verbal IQ scores predict variation in post-test language scores. -->
+<!-- ## Statistical Models -->
+<!-- In the last unit we fitted several linear mixed-effects models to predict variation in students' post-test language scores. The statistical models for these are presented below. -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathbf{Model~1:~}\mathrm{Language~Score}_{ij} &= \big[\beta_0 + b_{0j}\big] + \epsilon_{ij} \\[1em] -->
+<!-- \mathbf{Model~2:~}\mathrm{Language~Score}_{ij} &= \big[\beta_0 + b_{0j}\big] + \beta_1(\mathrm{Verbal~IQ}_{ij}) + \epsilon_{ij} \\[1em] -->
+<!-- \mathbf{Model~3:~}\mathrm{Language~Score}_{ij} &= \big[\beta_0 + b_{0j}\big] + \beta_1(\mathrm{Verbal~IQ}_{ij}) + \beta_2(\mathrm{Pre\mbox{-}test~score}_{ij}) + \beta_3(\mathrm{SES}_{ij}) + \epsilon_{ij} \\[1em] -->
+<!-- \mathbf{Model~4:~}\mathrm{Language~Score}_{ij} &= \big[\beta_0 + b_{0j}\big] + \beta_1(\mathrm{Verbal~IQ}_{ij}) + \beta_2(\mathrm{Pre\mbox{-}test~score}_{ij}) + \beta_3(\mathrm{SES}_{ij}) + \\ -->
+<!-- &\qquad\beta_4(\mathrm{Non\mbox{-}denominational}_{\bullet j}) + \beta_5(\mathrm{Protestant}_{\bullet j}) + \beta_6(\mathrm{Public}_{\bullet j})  + \epsilon_{ij} -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- This representation of the models is referred to as the **composite model** or the **mixed-effects model** since they include both the fixed- and random-effects in the same equation. -->
+<!-- ## Writing the Model as a Multilevel Model -->
+<!-- Another way we can express the model is by seperating the mixed-effects model equation into multiple equations; one for each level of variation. For example, each of the mixed-effects models listed above could be separated into two equations: a student-level equation (Level-1) and a set of school-level equations (Level-2). As an example, take the equation for Model 2: -->
+<!-- $$ -->
+<!-- \mathrm{Language~Score}_{ij} = \big[\beta_0 + b_{0j}\big] + \beta_1(\mathrm{Verbal~IQ}_{ij}) + \epsilon_{ij} -->
+<!-- $$ -->
+<!-- We initially write the student-level, or Level-1 equation. The level-1 equation includes all the fixed-effects and the random error term from the mixed-effects model. When writing the Level-1 model, we add a *j* subscript to each of the fixed-effects to indicate that the particular effect may be unique to a particular school. The Level-1 equation for Model 2 is: -->
+<!-- $$ -->
+<!-- \mathrm{Language~Score}_{ij} = \beta_{0j} + \beta_{1j}(\mathrm{Verbal~IQ}_{ij}) + \epsilon_{ij} -->
+<!-- $$ -->
+<!-- The Level-1 equation describes the variation in students' post-test language scores. It says that this variation is decomposed into that which is explained by differences in students' verbal IQ scores and unexplained random error. The *j* subscipt on the fixed-effects terms indicates that the intercept and effect of verbal IQ scores is the same for all students within a particular school. -->
+<!-- After writing the Level-1 equation, we can write out the Level-2, or school-level equation(s). There will be a Level-2 equation for each of the fixed-effects in the Level-1 model. In our example, since we have two fixed-effects in the Level-1 model ($\beta_0$ and $\beta_1$), there will be two Level-2 equations. In each Level-2 equations, the outcome is one of the fixed-effects from the Level-1 equation. These equations describe how the school-specific intercept and slopes differ across schools. As such, they may include the random-effects and any school-level effects. For example, we can write the Level-2 equations for Model 2 as: -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \beta_{0j} &= \beta_0 + b_{0j}\\ -->
+<!-- \beta_{1j} &= \beta_1\\ -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- These equations indicate that the school-specific intercepts are a function of some part common to all schools ($\beta_0$; a fixed-effect) and some deviation from that ($b_{0j}$; a random-effect of intercept). The random-effect is the reason that schools can have different intercepts. The school-specific slope, on the other hand, dos not vary by school; it is the same for each school. -->
+<!-- Together these equations are referred to as the set of multilevel equations: -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathbf{Level\mbox{-}1:}\\ -->
+<!-- &~ \mathrm{Language~Score}_{ij} = \beta_{0j} + \beta_{1j}(\mathrm{Verbal~IQ}_{ij}) + \epsilon_{ij}\\ -->
+<!-- \mathbf{Level\mbox{-}2:}\\ -->
+<!-- &~ \beta_{0j} = \beta_0 + b_{0j}\\ -->
+<!-- &~ \beta_{1j} = \beta_1\\ -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- ### Model 4 as a Multilevel Equation -->
+<!-- As a second example, consider Model 4: -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathrm{Language~Score}_{ij} &= \big[\beta_0 + b_{0j}\big] + \beta_1(\mathrm{Verbal~IQ}_{ij}) + \beta_2(\mathrm{Pre\mbox{-}test~score}_{ij}) + \beta_3(\mathrm{SES}_{ij}) + \\ -->
+<!-- &\qquad\beta_4(\mathrm{Non\mbox{-}denominational}_{\bullet j}) + \beta_5(\mathrm{Protestant}_{\bullet j}) + \beta_6(\mathrm{Public}_{\bullet j})  + \epsilon_{ij} -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- The Level-1 equation is: -->
+<!-- $$ -->
+<!-- \mathrm{Language~Score}_{ij} = \beta_{0j} + \beta_{1j}(\mathrm{Verbal~IQ}_{ij}) + \beta_{2j}(\mathrm{Pre\mbox{-}test~score}_{ij}) + \beta_{3j}(\mathrm{SES}_{ij}) + \epsilon_{ij} -->
+<!-- $$ -->
+<!-- This equation indicates that students' post-test language scores are a function of a school-specific intercept, a school-specific effect of verbal IQ scores, a school-specific effect of language pre-test scores, a school-specific effect of SES, and random error. There are now four Level-2 equations: -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \beta_{0j} &= \beta_0 + \beta_4(\mathrm{Non\mbox{-}denominational}_{\bullet j}) + \beta_5(\mathrm{Protestant}_{\bullet j}) + \beta_6(\mathrm{Public}_{\bullet j}) + b_{0j}\\ -->
+<!-- \beta_{1j} &= \beta_1\\ -->
+<!-- \beta_{2j} &= \beta_2\\ -->
+<!-- \beta_{3j} &= \beta_3\\ -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- These equations indicates that each school-specific intercept is a function of a fixed, or common, intercept, the type of school, and random error. The effects of verbal IQ scores, pre-test language scores, and SES are constant, or fixed, across schools (there is not a random-effect in any of the last three Level-2 equations). -->
+<!-- ### Going from Multilevel Models to the Mixed-Effects Model -->
+<!-- If we have the multilevel equations, we can substitute the Level-2 equation(s) into the Level-1 equation to get the composite equation or mixed-effects equation. For example, for Model 2, substituting $\beta_0 + b_{0j}$ into $\beta_{0j}$ and $\beta_1$ into $\beta_{1j}$ gives us: -->
+<!-- $$ -->
+<!-- \mathrm{Language~Score}_{ij} = \beta_{0} + b_{0j} + \beta_{1}(\mathrm{Verbal~IQ}_{ij}) + \epsilon_{ij} -->
+<!-- $$ -->
+<!-- Similarly substituting the Level-2 information into the Level-1 equation for Model 4, we end up the following mixed-effects represenation: -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathrm{Language~Score}_{ij} &= \bigg[\beta_0 + \beta_4(\mathrm{Non\mbox{-}denominational}_{\bullet j}) + \beta_5(\mathrm{Protestant}_{\bullet j}) + \beta_6(\mathrm{Public}_{\bullet j}) + b_{0j}\bigg] +  \\ -->
+<!-- &\qquad \beta_1(\mathrm{Verbal~IQ}_{ij}) + \beta_2(\mathrm{Pre\mbox{-}test~score}_{ij}) + \beta_3(\mathrm{SES}_{ij}) +  + \epsilon_{ij} -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- Which, if we re-arrange terms gives us the same mixed-effects model that we started with. This substitution also helps us think about which Level-2 equation we put the the school-level predictors in. For example, what if we would have put the school type predictors into the Level-2 equation associated with verbal IQ? -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathbf{Level\mbox{-}1:}\\ -->
+<!-- &~ \mathrm{Language~Score}_{ij} = \beta_{0j} + \beta_{1j}(\mathrm{Verbal~IQ}_{ij}) + \beta_{2j}(\mathrm{Pre\mbox{-}test~score}_{ij}) + \beta_{3j}(\mathrm{SES}_{ij}) + \epsilon_{ij}\\ -->
+<!-- \mathbf{Level\mbox{-}2:}\\ -->
+<!-- &~ \beta_{0j} = \beta_0 + b_{0j}\\ -->
+<!-- &~ \beta_{1j} = \beta_1 + \beta_4(\mathrm{Non\mbox{-}denominational}_{\bullet j}) + \beta_5(\mathrm{Protestant}_{\bullet j}) + \beta_6(\mathrm{Public}_{\bullet j})\\ -->
+<!-- &~ \beta_{2j} = \beta_2\\ -->
+<!-- &~ \beta_{3j} = \beta_3\\ -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- If we substitute back into the Level-1 equation, the composite equation is: -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathrm{Language~Score}_{ij} &= \bigg[\beta_0 + b_{0j}\bigg] +  \\ -->
+<!-- &\qquad \bigg[\beta_1 + \beta_4(\mathrm{Non\mbox{-}denominational}_{\bullet j}) + \beta_5(\mathrm{Protestant}_{\bullet j}) + \beta_6(\mathrm{Public}_{\bullet j}) \bigg](\mathrm{Verbal~IQ}_{ij}) + \\ -->
+<!-- &\qquad \beta_2(\mathrm{Pre\mbox{-}test~score}_{ij}) + \beta_3(\mathrm{SES}_{ij}) + \epsilon_{ij} \\[1em] -->
+<!-- &= \big[\beta_0 + b_{0j}\big] + \beta_1(\mathrm{Verbal~IQ}_{ij}) + \beta_4(\mathrm{Non\mbox{-}denominational}_{\bullet j})(\mathrm{Verbal~IQ}_{ij}) + \\  -->
+<!-- &\qquad \beta_5(\mathrm{Protestant}_{\bullet j})(\mathrm{Verbal~IQ}_{ij}) + \beta_6(\mathrm{Public}_{\bullet j})(\mathrm{Verbal~IQ}_{ij}) + \beta_2(\mathrm{Pre\mbox{-}test~score}_{ij}) + \\ -->
+<!-- &\qquad \beta_3(\mathrm{SES}_{ij}) + \epsilon_{ij} -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- Adding the school type predictors in the verbal IQ equation produces interaction terms (product terms) in the composite equation! Adding them to the intercept equation produced main-effects. Since our orginal mixed-effects model included school type as a main-effect, we need to include them in the intercept equation. Note that if the composite equation included both a main-effect and an interaction, we would need to include the predictor in more than one of the Level-2 equations (e.g., in the intercept equation and the verbal IQ equation). -->
+<!-- > Any predictors included in the Level-2 slope equations also need to be included in the Level-2 intercept equation. -->
+<!-- ### Guidelines for Writing the Multilevel Equations -->
+<!-- Here are some guidelines in helping you think about writing multilevel equations.  -->
+<!-- - Write the Level-1 equation first. This will be an equation that expresses the outcome's relationship to a series of school-specific parameters and a student-specific residual. -->
+<!-- - The number of school-specific parameters in the Level-1 equation (aside from the residual) dictate the number of Level-2 equations you will have.  -->
+<!-- - The school-specific parameters from the Level-1 equation will be the outcomes in the Level-2 equations. -->
+<!-- - Random-effects are the residuals in the Level-2 equations, and therefore are in the Level-2 equations; one per equation. -->
+<!-- - Variables from the data go to their appropriate level. For example student-level variables will be put in the Level-1 equation, and school-level predictors will be put in one or more of the Level-2 equations. -->
+<!-- ## Multilevel Equations for Fixed-Effects Models -->
+<!-- Our conventional fixed-effects regression models (LM) can also be expressed as a multilevel model. For example, consider the fixed-effect model that includes an intercept and effect of verbal IQ score: -->
+<!-- $$ -->
+<!-- \mathrm{Language~Score}_{i} = \beta_{0} + \beta_{1}(\mathrm{Verbal~IQ}_{i}) + \epsilon_{i} -->
+<!-- $$ -->
+<!-- The multilevel model would specify that the Level-2 equations would only include fixed-effects (no random-effects). Thus when we substitute them back into the Level-1 model we only have fixed-effects in the model: -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathbf{Level\mbox{-}1:}\\ -->
+<!-- &~ \mathrm{Language~Score}_{ij} = \beta_{0j} + \beta_{1j}(\mathrm{Verbal~IQ}_{ij}) + \epsilon_{ij}\\ -->
+<!-- \mathbf{Level\mbox{-}2:}\\ -->
+<!-- &~ \beta_{0j} = \beta_{0}\\ -->
+<!-- &~ \beta_{1j} = \beta_{1} -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- ## Why are Multilevel Expressions Helpful? -->
+<!-- Expressing the model as a set of multilevel equations can be helpful for readers. First, it explicitly separates the sources of variation and the predictors of these sources of variation into different levels. In our example there are two sources of variation student-level variation (within-school) and school-level variation (between-school). The Level-1 model attempts to describe the student-level variation and only includes predictors of the student-level variation (i.e., only student-level predictors appear in the Level-1 model). The Level-2 models attempts to describe the school-level variation and only includes predictors of the school-level variation (i.e., only school-level predictors appear in the Level-2 models). -->
+<!-- Secondly, the multilevel expression of the model helps us think aboout what the predictors at each level are actually doing. Level-1 predictors explain variation in the outcome. In our example, they are explaining variation in students' post-test language scores. The Level-2 predictors are explaining variation in the school-specific intercepts (or intercepts and slopes)---they explain Level-2 variation.  -->
+<!-- Thirdly, the multilevel expression of the model helps us see that the random-effects are residuals; they are residuals of the Level-2 models. This helps us think about the more general statistical model. For example, the general statistial model for a model that includes fixed-effects of two predictors and a random-effect of intercept is: -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathbf{Level\mbox{-}1:}\\ -->
+<!-- &~ Y_{ij} = \beta_{0j} + \beta_{1j}(X_{1ij}) + \beta_{2j}(X_{2ij})  + \epsilon_{ij}\\ -->
+<!-- \mathbf{Level\mbox{-}2:}\\ -->
+<!-- &~ \beta_{0j} = \beta_{0} + b_{0j}\\ -->
+<!-- &~ \beta_{1j} = \beta_{1} \\ -->
+<!-- &~ \beta_{2j} = \beta_{2} -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- where -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \epsilon_{ij} &\sim \mathcal{N}\bigg(0,\sigma^2_{\epsilon}\bigg)\\[1em] -->
+<!-- b_{0j} &\sim \mathcal{N}\bigg(0,\sigma^2_{0}\bigg) -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- In the mixed-effects model we put distributional assumptions on both the Level-1 residuals and the Level-2 residuals.  -->
+<!-- ### Evaluating the Assumptions: An Example -->
+<!-- Evaluating the assumptions in a mixed-effects model is a bit more complicated than it is in a fixed-effects model, and there are several things to check depending on the model that was fitted (among other things, the number of random-effects and their covariance structure). To simplify things, in this course, we will evaluate the distributional assumptions placed on the Level-1 residuals, and we will also evaluate the normality assumption on the random-effects. -->
+<!-- To illustrate assumption checking in practice, we will evaluate the assumptions for fitting Model 4. Recall that the multilevel expression of Model 4 was: -->
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathbf{Level\mbox{-}1:}\\ -->
+<!-- &~ \mathrm{Language~Score}_{ij} = \beta_{0j} + \beta_{1j}(\mathrm{Verbal~IQ}_{ij}) + \beta_{2j}(\mathrm{Pre\mbox{-}test~score}_{ij}) + \beta_{3j}(\mathrm{SES}_{ij}) + \epsilon_{ij}\\ -->
+<!-- \mathbf{Level\mbox{-}2:}\\ -->
+<!-- &~ \beta_{0j} = \beta_0 + \beta_4(\mathrm{Non\mbox{-}denominational}_{\bullet j}) + \beta_5(\mathrm{Protestant}_{\bullet j}) + \beta_6(\mathrm{Public}_{\bullet j}) +b_{0j}\\ -->
+<!-- &~ \beta_{1j} = \beta_1 \\ -->
+<!-- &~ \beta_{2j} = \beta_2\\ -->
+<!-- &~ \beta_{3j} = \beta_3\\ -->
+<!-- \end{split} -->
+<!-- $$ -->
+<!-- The assumptions are based on the Level-1 residuals ($\epsilon_{ij}$) and the Level-2 residuals, or random-effects ($b_{0j}$). So we need to examine the distributions of those two components. To begin, we will fit the mixed-effects model. -->
+<!-- ```{r} -->
+<!-- # Fit Model 4 -->
+<!-- lmer.4 = lmer(language_post ~ 1 + language_pre + ses +  -->
+<!--                 school_type + verbal_iq + (1 | school_id),  -->
+<!--               data = joined_data, REML = FALSE) -->
+<!-- ``` -->
+<!-- ### Evaluate Assumptions about the Level-1 Residuals -->
+<!-- We will evaluate the Level-1 residuals in the exact same way we evalauted the residuals from a fixed-effects (LM) analysis. The `augment()` function from the **broom** package produces the Level-1 residuals and fitted values. -->
+<!-- ```{r} -->
+<!-- # Augment the model to get the Level-1 residuals and fitted values -->
+<!-- out_4 = augment(lmer.4) -->
+<!-- head(out_4) -->
+<!-- ``` -->
+<!-- The Level-1 residuals are found in the `.resid` column, and the `.fitted` column contains the $\hat{Y}$ values. As with LM residual analysis, we want to examine the normality of the residuals in a density plot (or some other plot that allows you to evaluate this), and the other assumptions by plotting the residuals against the fitted values in a scatterplot. -->
+<!-- ```{r fig.width=6, fig.height=6, out.width='40%', fig.show='hold', fig.cap='Plots to evaluate the Level-1 residuals.'} -->
+<!-- # Density plot of the level-1 residuals -->
+<!-- sm.density(out_4$.resid, model = "normal") -->
+<!-- # Scatterplot of the Level-1 residuals versus the fitted values -->
+<!-- ggplot(data = out_4, aes(x = .fitted, y = .resid)) + -->
+<!--   geom_point() + -->
+<!--   geom_hline(yintercept = 0) + -->
+<!--   theme_bw() + -->
+<!--   xlab("Fitted values") + -->
+<!--   ylab("Level-1 residuals") -->
+<!-- ``` -->
+<!-- Based on the plots, some of the distributional assumptions for the Level-1 residuals seem reasonably satisfied. The density plot suggests that the normality assumption is tenable, and the scatterplot shows symmetry around the $Y=0$ line (linearity). The assumption of homoskedasticity is more in question. The pattern in the residuals shows more variation for fitted values between 30 and 50, and less variation for smaller and larger fitted values. -->
+<!-- ### Assumptions about the Random-Effects -->
+<!-- We also need to examine the assumptions for any random-effects included in the model. For this course, we will examine the normaility assumption. In our example that means we need to examine the normality assumption about the intercept random-effects. To do this we need to extract the random-effects from the model so we can use the `sm.density()` function to evaluate normality. -->
+<!-- ```{r out.width='45%', fig.cap='Density plot of the estimated random-effects for intercept.'} -->
+<!-- # Obtain the RE for intercept and slope -->
+<!-- re_int = ranef(lmer.4)$school_id[ , 1] -->
+<!-- # Density plot of the RE for intercept -->
+<!-- sm.density(re_int, model = "normal", xlab = "RE for intercept") -->
+<!-- ``` -->
+<!-- This assumption looks reasonably satisfied.  -->
+<!-- ## Other Resources {-} -->
+<!-- In addition to the notes and what we cover in class, there many other resources for learning about using linear mixed-effects models for longitudinal analysis. Here are some resources that may be helpful in that endeavor: -->
+<!-- - Long, J. D. (2012). [Longitudinal data analysis for the behavioral sciences using R](http://www.amazon.com/Longitudinal-Analysis-Behavioral-Sciences-Using/dp/1412982685). Thousand Oaks, CA: Sage. -->
+<!-- - Swihart, B. J., Caffo, B., James, B. D., Strand, M., Schwartz, B. S., &amp; Punjabi, N. M. (2010). [Lasagna plots: A saucy alternative to spaghetti plots.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2937254/) *Epidemiology, 21*(5), 621&ndash;625. -->
 
-<span class="co"># Create plot</span>
-<span class="kw">ggplot</span>(<span class="dt">data =</span> fig_<span class="dv">01</span>, <span class="kw">aes</span>(<span class="dt">x =</span> X, <span class="dt">y =</span> Y)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">x =</span> <span class="dv">65</span>, <span class="dt">y =</span> <span class="fl">0.01295176</span>, <span class="dt">size =</span> <span class="dv">3</span>)</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-95"></span>
-<img src="epsy-8252-notes_files/figure-html/unnamed-chunk-95-1.png" alt="Plot of the probability density function (PDF) for a Normal distribution with mean of 50 and standard deviation of 10. The density value for $x=65$, $p(65)= 0.01295176$, is also displayed on the PDF." width="50%" />
-<p class="caption">
-Figure 4.1: Plot of the probability density function (PDF) for a Normal distribution with mean of 50 and standard deviation of 10. The density value for <span class="math inline">\(x=65\)</span>, <span class="math inline">\(p(65)= 0.01295176\)</span>, is also displayed on the PDF.
-</p>
-</div>
-<div id="other-useful-r-functions-for-working-with-probability-distributions" class="section level3">
-<h3><span class="header-section-number">4.2.1</span> Other Useful R Functions for Working with Probability Distributions</h3>
-<p>There are four primary functions for working with the normal probability distribution:</p>
-<ul>
-<li><code>dnorm()</code> : To compute the probability density (point on the curve)</li>
-<li><code>pnorm()</code> : To compute the probability (area under the PDF)</li>
-<li><code>qnorm()</code> : To compute the <span class="math inline">\(x\)</span> value given a particular probability</li>
-<li><code>rnorm()</code> : To draw a random observation from the distribution</li>
-</ul>
-<p>Each of these requires the arguments <code>mean=</code> and <code>sd=</code>. Let’s look at some of them in use.</p>
-</div>
-<div id="finding-cumulative-probability" class="section level3">
-<h3><span class="header-section-number">4.2.2</span> Finding Cumulative Probability</h3>
-<p>The function <code>pnorm()</code> gives the probability <span class="math inline">\(x\)</span> is less than or equal to some quantile value in the distribution; the cumulative probability. For example, to find the probability that <span class="math inline">\(x \leq 65\)</span> we would use,</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="dt">q =</span> <span class="dv">65</span>, <span class="dt">mean =</span> <span class="dv">50</span>, <span class="dt">sd =</span> <span class="dv">10</span>)</code></pre>
-<pre><code>[1] 0.9332</code></pre>
-<p>This is akin to finding the proportion of the area under the normal PDF that is to the left of 65.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-97"></span>
-<img src="epsy-8252-notes_files/figure-html/unnamed-chunk-97-1.png" alt="Plot of the PDF for a normal distribution (M=50, SD=10) with the cumulative probability for X less than or equal to 65 shaded." width="50%" />
-<p class="caption">
-Figure 4.2: Plot of the PDF for a normal distribution (M=50, SD=10) with the cumulative probability for X less than or equal to 65 shaded.
-</p>
-</div>
-<p>For the mathematically inclined, the grey-shaded area is expressed as an integral</p>
-<p><span class="math display">\[
-\int_{-\infty}^{65} p(x) dx
-\]</span></p>
-<p>where <span class="math inline">\(p(x)\)</span> is the PDF for the normal distribution.</p>
-</div>
-<div id="cumulative-density-and-p-value" class="section level3">
-<h3><span class="header-section-number">4.2.3</span> Cumulative Density and <span class="math inline">\(p\)</span>-Value</h3>
-<p>This type of computation is used most commonly to find a <span class="math inline">\(p\)</span>-value. The <span class="math inline">\(p\)</span>-value is just the area under the distribution (curve) that is AT LEAST as extreme as some observed value. Consider a hypothesis test of whether a population parameter is equal to 0. Also consider that we observed a statistic (that has been standardized) of <span class="math inline">\(z=2.5\)</span>. Then, the <span class="math inline">\(p\)</span>-value can be graphically displayed in the standard normal distribution as follows:</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-98"></span>
-<img src="epsy-8252-notes_files/figure-html/unnamed-chunk-98-1.png" alt="Plot of the probability density function (PDF) for the standard normal distribution (M=0, SD=1). The cumulative density representing the p-value for a two-tailed test evaluating whether mu=0 using an observed z-value of 2.5 is also displayed." width="50%" />
-<p class="caption">
-Figure 4.3: Plot of the probability density function (PDF) for the standard normal distribution (M=0, SD=1). The cumulative density representing the p-value for a two-tailed test evaluating whether mu=0 using an observed z-value of 2.5 is also displayed.
-</p>
-</div>
-<p>In most hypothesis tests, we test whether the parameter IS EQUAL to 0. Thus the values in the standard normal distribution more extreme than 2.5 encompass evidence against the hypothesis; those values greater than 2.5 and also those values less than <span class="math inline">\(-2.5\)</span>. (This is akin to testing a fair coin when both 8 heads OR 8 tails would provide evidence against fairness we have to consider evidence in both directions).</p>
-<p>To compute this we use <code>pnorm()</code>. Remember, it computes the proportion of the area under the curve TO THE LEFT of a particular value. Here we will compute the are to the left of <span class="math inline">\(-2.5\)</span> and then double it to produce the actual <span class="math inline">\(p\)</span>-value.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dt">q =</span> <span class="fl">-2.5</span>, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)</code></pre>
-<pre><code>[1] 0.01242</code></pre>
-</div>
-<div id="finding-quantiles" class="section level3">
-<h3><span class="header-section-number">4.2.4</span> Finding Quantiles</h3>
-<p>The <code>qnorm()</code> function is essentially the inverse of the <code>pnorm()</code> function. The <code>p</code> functions find the cumulative probability GIVEN a particular quantile. The <code>q</code> functions find the quantile GIVEN a cumulative probability. For example, in the normal distribution we defined earlier, half of the area is below the quantile value of 50 (the mean).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qnorm</span>(<span class="dt">p =</span> <span class="fl">0.5</span>, <span class="dt">mean =</span> <span class="dv">50</span>, <span class="dt">sd =</span> <span class="dv">10</span>)</code></pre>
-<pre><code>[1] 50</code></pre>
-</div>
-</div>
-<div id="students-t-distribution" class="section level2">
-<h2><span class="header-section-number">4.3</span> Student’s <span class="math inline">\(t\)</span>-Distribution</h2>
-<p>Student’s <span class="math inline">\(t\)</span>-distribution looks like a standard normal distribution. In the figure below, Student’s <span class="math inline">\(t\)</span>-distribution is depicted with a solid, black line and the standard normal distribution (<span class="math inline">\(M=0\)</span>, <span class="math inline">\(SD=1\)</span>) is depicted with a dotted, red line.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-101"></span>
-<img src="epsy-8252-notes_files/figure-html/unnamed-chunk-101-1.png" alt="Plot of the probability density function (PDF) for the standard normal distribution (dotted, red line) and Student's t-distribution with 5 degrees of freedom (solid, black line)." width="50%" />
-<p class="caption">
-Figure 4.4: Plot of the probability density function (PDF) for the standard normal distribution (dotted, red line) and Student’s t-distribution with 5 degrees of freedom (solid, black line).
-</p>
-</div>
-<p>Both the standard normal distribution and Student’s <span class="math inline">\(t\)</span>-distribution have a mean (expected value) of 0. The standard deviation for Student’s <span class="math inline">\(t\)</span>-distribution is larger than the standard deviation for the standard normal distribution (<span class="math inline">\(SD&gt;1\)</span>). You can see this in the distribution because the tails in Student’s <span class="math inline">\(t\)</span>-distribution are fatter (more error) than the standard normal distribution.</p>
-<p>In practice, we often use Student’s <span class="math inline">\(t\)</span>-distribution rather than the standard normal distribution when we are using sample data to estimate the population. This estimation increases the error and thus is typically modeled using Student’s <span class="math inline">\(t\)</span>-distribution.</p>
-<p>Student’s <span class="math inline">\(t\)</span>-distribution constitutes a family of distributions—not just a single distribution. The specific shape (and thus probability density) is defined by the <em>degrees of freedom</em>; <em>df</em>. The plot below shows the standard normal distribution (purple) and four <span class="math inline">\(t\)</span>-distributions with varying <em>df</em>-values.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-102"></span>
-<img src="epsy-8252-notes_files/figure-html/unnamed-chunk-102-1.png" alt="Plot of several t-distributions with differing degrees of freedom." width="80%" />
-<p class="caption">
-Figure 4.5: Plot of several t-distributions with differing degrees of freedom.
-</p>
-</div>
-<pre><code>  df M   SD
-1 03 0 2.00
-2 05 0 1.50
-3 10 0 1.22
-4 25 0 1.08
-5  z 0 1.00</code></pre>
-<p>If we compare the means and SDs for these distributions, we find that the mean for all the <span class="math inline">\(t\)</span>-distributions is 0, same as the standard normal distribution. All <span class="math inline">\(t\)</span>-distributions are unimodal and symmetric around zero. The SD for every <span class="math inline">\(t\)</span>-distribution is higher than the SD for the standard normal distribution. Student <span class="math inline">\(t\)</span>-distributions with higher <em>df</em> values have less variation. It turns out that the standard normal distribution is a <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(\infty\)</span> <em>df</em>. For the formula for the SD in a <span class="math inline">\(t\)</span>-distribution, see <span class="citation">Fox (<a href="#ref-Fox:2009">2009</a>)</span>.</p>
-<p>There are four primary functions for working with Student’s <span class="math inline">\(t\)</span>-distribution:</p>
-<ul>
-<li><code>dt()</code> : To compute the probability density (point on the curve)</li>
-<li><code>pt()</code> : To compute the probability (area under the PDF)</li>
-<li><code>qt()</code> : To compute the <span class="math inline">\(x\)</span> value given a particular probability</li>
-<li><code>rt()</code> : To draw a random observation from the distribution</li>
-</ul>
-<p>Each of these requires the arguments <code>df=</code>. Let’s look at some of them in use.</p>
-<div id="comparing-probability-densities" class="section level3">
-<h3><span class="header-section-number">4.3.1</span> Comparing Probability Densities</h3>
-<p>How do the probability densities for a value of <span class="math inline">\(X\)</span> compare across these distributions? Let’s examine the <span class="math inline">\(X\)</span> value of 2.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Standard normal distribution</span>
-<span class="kw">pnorm</span>(<span class="dt">q =</span> <span class="dv">2</span>, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)</code></pre>
-<pre><code>[1] 0.9772</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># t-distribution with 3 df</span>
-<span class="kw">pt</span>(<span class="dt">q =</span> <span class="dv">2</span>, <span class="dt">df =</span> <span class="dv">3</span>)</code></pre>
-<pre><code>[1] 0.9303</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># t-distribution with 5 df</span>
-<span class="kw">pt</span>(<span class="dt">q =</span> <span class="dv">2</span>, <span class="dt">df =</span> <span class="dv">5</span>)</code></pre>
-<pre><code>[1] 0.949</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># t-distribution with 10 df</span>
-<span class="kw">pt</span>(<span class="dt">q =</span> <span class="dv">2</span>, <span class="dt">df =</span> <span class="dv">10</span>)</code></pre>
-<pre><code>[1] 0.9633</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># t-distribution with 25 df</span>
-<span class="kw">pt</span>(<span class="dt">q =</span> <span class="dv">2</span>, <span class="dt">df =</span> <span class="dv">25</span>)</code></pre>
-<pre><code>[1] 0.9718</code></pre>
-<p>We are essentially comparing the height of these distributions at <span class="math inline">\(X=2\)</span>.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-105"></span>
-<img src="epsy-8252-notes_files/figure-html/unnamed-chunk-105-1.png" alt="Plot of several t-distributions with differing *degrees of freedom. The probability density for t=2 is also displayed for each of the distributions." width="80%" />
-<p class="caption">
-Figure 4.6: Plot of several t-distributions with differing *degrees of freedom. The probability density for t=2 is also displayed for each of the distributions.
-</p>
-</div>
-</div>
-<div id="comparing-cumulative-densities" class="section level3">
-<h3><span class="header-section-number">4.3.2</span> Comparing Cumulative Densities</h3>
-<p>What if we wanted to look at cumulative density? Consider out hypothesis test of whether a population parameter is equal to 0. Also consider that we observed a statistic (that has been standardized) of 2.5 using a sample size of <span class="math inline">\(n=15\)</span>.</p>
-<p>If we can assume that the SAMPLING DISTRIBUTION is normally-distributed then we can use the cumulative density in a normal distribution to compute a <span class="math inline">\(p\)</span>-value:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dt">q =</span> <span class="fl">-2.5</span>, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)</code></pre>
-<pre><code>[1] 0.01242</code></pre>
-<p>If, however, the SAMPLING DISTRIBUTION is <span class="math inline">\(t\)</span>-distributed then we need to use the cumulative density for a <span class="math inline">\(t\)</span>-distribution with the appropriate <em>df</em> to compute a <span class="math inline">\(p\)</span>-value. For example if we use <span class="math inline">\(df=n-1\)</span>, the two-tailed <span class="math inline">\(p\)</span>-value would be:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="fl">-2.5</span>, <span class="dt">df =</span> <span class="dv">14</span>)</code></pre>
-<pre><code>[1] 0.02547</code></pre>
-<p>The <span class="math inline">\(p\)</span>-value using the <span class="math inline">\(t\)</span>-distribution is larger than the <span class="math inline">\(p\)</span>-value computed based on the standard normal distribution. This is again because of the increased error (uncertainty) we are introducing when we estimate from sample. This added uncertainty makes it harder for us to reject a hypothesis.</p>
-</div>
-</div>
-<div id="using-the-t-distribution-in-regression" class="section level2">
-<h2><span class="header-section-number">4.4</span> Using the <span class="math inline">\(t\)</span>-Distribution in Regression</h2>
-<p>To illustrate how probability distributions are used in practice, we will will use the <em>riverview.csv</em> (see the <a href="data-codebook.html#riverview">data codebook</a> here) and fit a regression model that uses education level and seniority to predict variation in employee income.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in data</span>
-city =<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;~/Documents/github/epsy-8252/data/riverview.csv&quot;</span>)
-<span class="kw">head</span>(city)</code></pre>
-<pre><code># A tibble: 6 x 6
-  education income seniority gender  male party      
-      &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;      
-1         8  37449         7 male       1 Democrat   
-2         8  26430         9 female     0 Independent
-3        10  47034        14 male       1 Democrat   
-4        10  34182        16 female     0 Independent
-5        10  25479         1 female     0 Republican 
-6        12  46488        11 female     0 Democrat   </code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit regression model</span>
-lm<span class="fl">.1</span> =<span class="st"> </span><span class="kw">lm</span>(income <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>seniority, <span class="dt">data =</span> city)
-
-<span class="co"># Coefficient-level output</span>
-<span class="kw">tidy</span>(lm<span class="fl">.1</span>)</code></pre>
-<pre><code># A tibble: 3 x 5
-  term        estimate std.error statistic     p.value
-  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
-1 (Intercept)    6769.     5373.      1.26 0.218      
-2 education      2252.      335.      6.73 0.000000220
-3 seniority       739.      210.      3.52 0.00146    </code></pre>
-<p>How do we obtain the <span class="math inline">\(p\)</span>-value for each of the coefficients? Recall that the coefficients and SEs for the coefficients are computed directly from the raw data. Then we can compute a test-statistic by dividing the coefficient estimate by the SE. For example, to compute the test-statistic associated with education level:</p>
-<p><span class="math display">\[
-t = \frac{2252}{335} = 6.72
-\]</span></p>
-<p>Since we are estimating the SE using sample data, our test statistic is likely <span class="math inline">\(t\)</span>-distributed. Which value should we use for <em>df</em>? Well, for that, statistical theory tells us that we should use the error <em>df</em> value. In our data,</p>
-<p><span class="math display">\[
-\begin{split}
-n &amp;= 32 \\
-\mathrm{Total~df} &amp;= 32-1 = 31\\
-\mathrm{Model~df} &amp;= 2~\mathrm{(two~predictors)} \\
-\mathrm{Error~df} &amp;= 31-2 = 29
-\end{split}
-\]</span></p>
-<p>Using the <span class="math inline">\(t\)</span>-distribution with 29 <em>df</em>,</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="fl">-6.72</span>, <span class="dt">df =</span> <span class="dv">29</span>)</code></pre>
-<pre><code>[1] 0.0000002257</code></pre>
-<p>For seniority (and the intercept), we would use the same <span class="math inline">\(t\)</span>-distribution, but our test statistic would differ:</p>
-<p><span class="math display">\[
-\begin{split}
-t_{\mathrm{Intercept}} &amp;= \frac{6769}{5373} = 1.26 \\
-t_{\mathrm{Seniority}} &amp;= \frac{739}{210} = 3.52 \\
-\end{split}
-\]</span></p>
-<p>The associated <span class="math inline">\(p\)</span>-values are:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Intercept p-value</span>
-<span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="fl">-1.26</span>, <span class="dt">df =</span> <span class="dv">29</span>)</code></pre>
-<pre><code>[1] 0.2177</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Seniority p-value</span>
-<span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="fl">-3.52</span>, <span class="dt">df =</span> <span class="dv">29</span>)</code></pre>
-<pre><code>[1] 0.001446</code></pre>
-</div>
-<div id="model-level-inference-the-f-distribution" class="section level2">
-<h2><span class="header-section-number">4.5</span> Model-Level Inference: The <span class="math inline">\(F\)</span>-Distribution</h2>
-<p>The model-level inference for regression is based on an <span class="math inline">\(F\)</span>-statistic, which is a standardized measure of <span class="math inline">\(R^2\)</span>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Model-level output</span>
-<span class="kw">glance</span>(lm<span class="fl">.1</span>)</code></pre>
-<pre><code># A tibble: 1 x 11
-  r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC
-      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     0.742         0.724 7646.      41.7 2.98e-9     3  -330.  668.  674.
-# … with 2 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;</code></pre>
-<p>In this example, the sample <span class="math inline">\(R^2\)</span> value is 0.742. Computation of the <span class="math inline">\(F\)</span>-statistic relies on two <em>df</em> values—the model degrees of freedom (2) and the error degrees of freedom (29). To compute the <span class="math inline">\(F\)</span>-statistics from <span class="math inline">\(R^2\)</span> we use:</p>
-<p><span class="math display">\[
-F = \frac{R^2}{1-R^2} \times \frac{\mathrm{df}_{\mathrm{Error}}}{\mathrm{df}_{\mathrm{Model}}}
-\]</span></p>
-<p>In our example, we compute <span class="math inline">\(F\)</span> as:</p>
-<p><span class="math display">\[
-\begin{split}
-F &amp;= \frac{0.742}{1-0.742} \times \frac{29}{2} \\
-&amp;= 41.7
-\end{split}
-\]</span></p>
-<p>We write this standardization of <span class="math inline">\(R^2\)</span> as <span class="math inline">\(F(2,29)=41.7\)</span>.</p>
-<div id="testing-the-model-level-null-hypothesis" class="section level3">
-<h3><span class="header-section-number">4.5.1</span> Testing the Model-Level Null Hypothesis</h3>
-<p>It is often worth testing whether the model explains a statistically significant amount of variation in the population. To do this we test the null hypothesis:</p>
-<p><span class="math display">\[
-H_0:\rho^2 = 0
-\]</span></p>
-<p>Similar to the tests of the coefficients, we evaluate our test statistic (<span class="math inline">\(F\)</span> in this case) in the appropriate test distribution, in this case an <span class="math inline">\(F\)</span>-distribution with 2 and 29 degrees of freedom. (The shape of the <span class="math inline">\(F\)</span>-distribution is based on two <em>df</em> values.) The figure below, shows the <span class="math inline">\(F(2,29)\)</span>-distribution as a solid, black line.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-112"></span>
-<img src="epsy-8252-notes_files/figure-html/unnamed-chunk-112-1.png" alt="Plot of several F-distributions with differing degrees of freedom. The F(2,29)-distribution is shown as a solid, black line." width="80%" />
-<p class="caption">
-Figure 4.7: Plot of several F-distributions with differing degrees of freedom. The F(2,29)-distribution is shown as a solid, black line.
-</p>
-</div>
-<p>The <span class="math inline">\(F\)</span>-distribution, like the <span class="math inline">\(t\)</span>-distribution is a family of distributions. They are positively skewed and generally have a lower-limit of 0. Because of this, when we use the <span class="math inline">\(F\)</span>-distribution to compute a <span class="math inline">\(p\)</span>-value, we only compute the cumulative density GREATER THAN OR EQUAL TO the value of the standardized test statistic.</p>
-<div id="computing-f-from-the-anova-partitioning" class="section level4">
-<h4><span class="header-section-number">4.5.1.1</span> Computing F from the ANOVA Partitioning</h4>
-<p>We can also compute the model-level <span class="math inline">\(F\)</span>-statistic using the partitioning of variation from the ANOVA table.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(lm<span class="fl">.1</span>)</code></pre>
-<pre><code>Analysis of Variance Table
-
-Response: income
-          Df     Sum Sq    Mean Sq F value       Pr(&gt;F)    
-education  1 4147330492 4147330492    70.9 0.0000000028 ***
-seniority  1  722883649  722883649    12.4       0.0015 ** 
-Residuals 29 1695313285   58459079                         
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>The <span class="math inline">\(F\)</span>-statistic is a ratio of the mean square for the model and the mean square for the error. To compute a mean square we use the general computation</p>
-<p><span class="math display">\[
-\mathrm{MS} = \frac{\mathrm{SS}}{\mathrm{df}}
-\]</span></p>
-<p>The model includes both the education and seniority predictor, so we combine the SS and df. The MS model is:</p>
-<p><span class="math display">\[
-\begin{split}
-\mathrm{MS}_{\mathrm{Model}} &amp;= \frac{\mathrm{SS}_{\mathrm{Model}}}{\mathrm{df}_{\mathrm{Model}}} \\
-&amp;= \frac{4147330492 + 722883649}{1 + 1} \\
-&amp;= \frac{4870214141}{2} \\
-&amp;= 2435107070
-\end{split}
-\]</span></p>
-<p>The MS error is:</p>
-<p><span class="math display">\[
-\begin{split}
-\mathrm{MS}_{\mathrm{Error}} &amp;= \frac{\mathrm{SS}_{\mathrm{Error}}}{\mathrm{df}_{\mathrm{Error}}} \\
-&amp;= \frac{1695313285 }{29} \\
-&amp;= 58459079
-\end{split}
-\]</span></p>
-<p>Then, we compute the <span class="math inline">\(F\)</span>-statistic by computing the ratio of these two mean squares.</p>
-<p><span class="math display">\[
-\begin{split}
-F &amp;= \frac{\mathrm{MS}_{\mathrm{Model}}}{\mathrm{MS}_{\mathrm{Error}}} \\
-&amp;= \frac{2435107070}{58459079} \\
-&amp;= 41.7
-\end{split}
-\]</span></p>
-<p>This is the observed <span class="math inline">\(F\)</span>-statistic for the model. Note that this is an identical computation (although reframed) as the initial computation for <span class="math inline">\(F\)</span>.</p>
-<p>$$
-\begin{split}
-F &amp;=   \[1em]
-&amp;=   \[1em]
-&amp;=   \[1em]
-&amp;=   \[1em]</p>
-<p>&amp;= _{} \[1em]
-&amp;= 
-\end{split}
-$$</p>
-<p>To test the null hypothesis, <span class="math inline">\(H_0:\rho^2=0\)</span>, we evaluate this observed <span class="math inline">\(F\)</span>-statistic in an <span class="math inline">\(F\)</span>-distribution with the 2 and 29 degrees of freedom.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-114"></span>
-<img src="epsy-8252-notes_files/figure-html/unnamed-chunk-114-1.png" alt="Plot of the probability density function (PDF) for the F-distribution with 2 and 29 degrees of freedom. The cumulative density representing the p-value for a two-tailed test evaluating whether rho-squared=0 using an observed F-statistic of 41.7 is also displayed." width="80%" />
-<p class="caption">
-Figure 4.8: Plot of the probability density function (PDF) for the F-distribution with 2 and 29 degrees of freedom. The cumulative density representing the p-value for a two-tailed test evaluating whether rho-squared=0 using an observed F-statistic of 41.7 is also displayed.
-</p>
-</div>
-<p>The computation using the cumulative density function, <code>pf()</code>, to obtain the <span class="math inline">\(p\)</span>-value is:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pf</span>(<span class="fl">41.7</span>, <span class="dt">df1 =</span> <span class="dv">2</span>, <span class="dt">df2 =</span> <span class="dv">29</span>)</code></pre>
-<pre><code>[1] 0.000000002942</code></pre>
-</div>
-</div>
-</div>
-<div id="mean-squares-are-variance-estimates" class="section level2">
-<h2><span class="header-section-number">4.6</span> Mean Squares are Variance Estimates</h2>
-<p>Mean squares are estimates of the variance. Consider the computational formula for the sample variance,</p>
-<p><span class="math display">\[
-\hat{\sigma}^2 = \frac{\sum(Y - \bar{Y})^2}{n-1}
-\]</span></p>
-<p>This is the total sum of squares divided by the total <em>df</em>. When we compute an <span class="math inline">\(F\)</span>-statistic, we are finding the ratio of two different variance estimates—one based on the model (explained variance) and one based on the error (unexplained variance). Under the null hypothesis that <span class="math inline">\(\rho^2 = 0\)</span>, we are assuming that all the variance is unexplained. In that case, our <span class="math inline">\(F\)</span>-statistic would be close to zero. When the model explains a significant amount of variation, the numerator gets larger relative to the denominator and the <span class="math inline">\(F\)</span>-value is larger.</p>
-<p>The mean squared error (from the <code>anova()</code> output) plays a special role in regression analysis. It is the variance estimate for the conditional distributions of the residuals in our visual depiction of the distributional assumptions of the residuals underlying linear regression.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-116"></span>
-<img src="images/regression-assumptions-residuals.png" alt="Visual depiction of the distributional assumptions of the residuals underlying linear regression." width="70%" />
-<p class="caption">
-Figure 4.9: Visual depiction of the distributional assumptions of the residuals underlying linear regression.
-</p>
-</div>
-<p>Recall that we made implicit assumptions about the conditional distributions of the residuals, namely that they were identically and normally distributed with a mean of zero and some variance. Based on the estimate of the mean squared error, the variance of each of these distributions is 58,459,079.</p>
-<p>While the variance is a mathematical convenience, the standard deviation is a better descriptor of the variation in these distributions. The standard deviation is 7646.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sqrt</span>(<span class="dv">58459079</span>)</code></pre>
-<pre><code>[1] 7646</code></pre>
-<p>We can also obtain this value from the model-level regression output. Here it is typically referred to as the <em>Root Mean Squared Error</em> (RMSE). In the <code>glance()</code> output this value is in the <code>sigma</code> column.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glance</span>(lm<span class="fl">.1</span>)</code></pre>
-<pre><code># A tibble: 1 x 11
-  r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC
-      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     0.742         0.724 7646.      41.7 2.98e-9     3  -330.  668.  674.
-# … with 2 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;</code></pre>
-<p>Why is this value important? It gives the expected variation in the distribution. For example, since all of the conditional distributions of the residuals are normally distributed, we would expect that 95% of the residuals would fall between <span class="math inline">\(\pm2\)</span> standard errors from 0; or, in this case, between <span class="math inline">\(-15292\)</span> and 15292. Observations with residuals that are more extreme may be regression outliers.</p>
-
-</div>
-</div>
-<h3>References</h3>
-<div id="refs" class="references">
-<div id="ref-Fox:2009">
-<p>Fox, J. (2009). <em>A mathematical primer for social statistics</em>. Thousand Oaks, CA: Sage.</p>
 </div>
 </div>
             </section>
@@ -702,8 +575,8 @@ Figure 4.9: Visual depiction of the distributional assumptions of the residuals 
           </div>
         </div>
       </div>
-<a href="log-transformations-some-final-thoughts.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="maximum-likelihood-estimation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="lmer-cross-sectional.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="lmer-longitudinal.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
