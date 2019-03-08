@@ -123,6 +123,16 @@ The school-level attributes in *netherlands-schools.csv* include:
 - `school_minority`: Percentage of students at the school who are minority students
 
 
+## nhl.csv {-#nhl}
+
+The data in *nhl.csv* includes data on the cost of attending an NHL game over 9 seasons for the current 31 NHL teams. The attributes include:
+
+- `team`: NHL team name
+- `fci`: Fan cost index (FCI) for each season. There are no data for 2012, since that year the NHL was locked out. The FCI comprises the prices of four (4) average-price tickets, two (2) small draft beers, four (4) small soft drinks, four (4) regular-size hot dogs, parking for one (1) car, two (2) game programs and two (2) least-expensive, adult-size adjustable caps. Costs were determined by telephone calls with representatives of the teams, venues and  concessionaires. Identical questions were asked in all interviews.
+- `year`: NHL season (e.g., 2002 indicates the 2002--2003 NHL season)
+- `hs_hockey`: An dummy coded variable that indicates whether there is state organized high school hockey in the team's location (0 = no; 1 = yes). This is a proxy for whether there is a hockey tradition in the team's location.
+
+
 ## popular-classroom.csv and popular-student.csv {-#popular}
 
 The data in *popular-classroom.csv* and *popular-student.csv* includes data on 2000 different students from 100 different classrooms. The data, provided by @Hox:2002, were simulated from data collected as part of a sociological study of student popularity. Student popularity, a rating on a scale of 1&ndash;10, was derived by a sociometric procedure in which all students in a class rate all the other students. Each students' popularity is the average received popularity rating.  
