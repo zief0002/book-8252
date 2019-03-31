@@ -50,6 +50,18 @@ The data in *fci-2015.csv* include five attributes collected from from the 2014/
 - `salary`: Average yearly salary for players on the active roster
 
 
+## graduation.csv {-#graduation}
+
+The data in *graduation.csv* include student-level attributes for $n=2344$ randomly sampled students who were first-year, full-time students from the 2002 cohort at a large, midwestern research university. Any students who transferred to another institution were removed from the data. The source of these data is: @Jones-White:2014. We will use these data to explore predictors of college graduation.
+
+- `degree`: Did the student graduate from the institution? (0 = No; 1 = Yes)
+- `act`: Student’s ACT score (If the student reported a SAT score, a concordance table was used to transform the score to a comparable ACT score.)
+- `scholarship`: Amount of scholarship offered to student (in thousands of dollars)
+- `ap`: Number of Advanced Placement credits at time of enrollment
+- `firstgen`: Is the student a first generation college student? (0 = No; 1 = Yes)
+- `nontrad`: Is the student a non-traditional student (older than 19 years old at the time of freshman enrollment)? (0 = No; 1 = Yes)
+
+
 ## mn-schools.csv {-#mn-schools}
 
 The data in *mnSchools.csv* were collected from [http://www.collegeresults.org](http://www.collegeresults.org) and contain 2011 institutional data for $n=33$ Minnesota colleges and universities. The attributes include:
@@ -162,6 +174,19 @@ The data in *riverview.csv* come from @Lewis-Beck:2016 and contain five attribut
 - `gender`: Employee's gender
 - `male`: Dummy coded gender variable (0 = Female, 1 = Male)
 - `party`: Political party affiliation
+
+
+## same-sex-marriage.csv {-#same-sex-marriage}
+
+This file contains data collected from the 2008 American National Election Study conducted jointly by the University of Michigan and Stanford University. These particular data consist of $n=1,746$ American's responses. The attributes in the dataset include:
+
+- `support`: Does the respondent support gay marriage? (1=Yes; 0=No)
+- `attendance`: How often does the respondent attend religious services? (0=Never; 1=Few times a year; 2=Once or twice a month; 3=Almost every week; 4=Every week) 
+- `denomination`: What is the respondent's religious denomination?
+- `friends`: Does the respondent have family or friends that are LGBT? (1=Yes; 0=No)
+- `age`: Respondent's age, in years
+- `female`: Is the respondent female? (1=Yes; 0=No)
+
 
 
 ## vocabulary.csv {-#vocabulary}

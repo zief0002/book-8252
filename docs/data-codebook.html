@@ -25,7 +25,7 @@
 <meta name="author" content="Andrew Zieffler">
 
 
-<meta name="date" content="2019-03-08">
+<meta name="date" content="2019-03-30">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -289,6 +289,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#ed-schools-2018"><i class="fa fa-check"></i>ed-schools-2018.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#evaluations"><i class="fa fa-check"></i>evaluations.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#fci-2015"><i class="fa fa-check"></i>fci-2015.csv</a></li>
+<li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#graduation"><i class="fa fa-check"></i>graduation.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#mn-schools"><i class="fa fa-check"></i>mn-schools.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#movies"><i class="fa fa-check"></i>movies.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#nba"><i class="fa fa-check"></i>nba-player-data.csv and nba-team-data.csv</a></li>
@@ -296,6 +297,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#nhl"><i class="fa fa-check"></i>nhl.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#popular"><i class="fa fa-check"></i>popular-classroom.csv and popular-student.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#riverview"><i class="fa fa-check"></i>riverview.csv</a></li>
+<li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#same-sex-marriage"><i class="fa fa-check"></i>same-sex-marriage.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#vocabulary"><i class="fa fa-check"></i>vocabulary.csv</a></li>
 <li class="chapter" data-level="" data-path="data-codebook.html"><a href="data-codebook.html#wine"><i class="fa fa-check"></i>wine.csv</a></li>
 </ul></li>
@@ -368,6 +370,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>league</code>: Major sporting league the team plays in (MLB = Major Lague Baseball; NBA = National Basketball Association; NFL = National Football League; NHL = National Hockey League)</li>
 <li><code>fci</code>: Fan Cost Index (FCI). The FCI is a summary of what it costs to take a family of four to a game. It comprises the prices of four (4) adult average-price tickets, two (2) small draft beers, four (4) small soft drinks, four (4) regular-size hot dogs, parking for one (1) car, two (2) game programs and two (2) least expensive, adult-size adjustable caps.</li>
 <li><code>salary</code>: Average yearly salary for players on the active roster</li>
+</ul>
+</div>
+<div id="graduation" class="section level2 unnumbered">
+<h2>graduation.csv</h2>
+<p>The data in <em>graduation.csv</em> include student-level attributes for <span class="math inline">\(n=2344\)</span> randomly sampled students who were first-year, full-time students from the 2002 cohort at a large, midwestern research university. Any students who transferred to another institution were removed from the data. The source of these data is: <span class="citation">Jones-White, Radcliffe, Lorenz, &amp; Soria (<a href="#ref-Jones-White:2014">2014</a>)</span>. We will use these data to explore predictors of college graduation.</p>
+<ul>
+<li><code>degree</code>: Did the student graduate from the institution? (0 = No; 1 = Yes)</li>
+<li><code>act</code>: Student’s ACT score (If the student reported a SAT score, a concordance table was used to transform the score to a comparable ACT score.)</li>
+<li><code>scholarship</code>: Amount of scholarship offered to student (in thousands of dollars)</li>
+<li><code>ap</code>: Number of Advanced Placement credits at time of enrollment</li>
+<li><code>firstgen</code>: Is the student a first generation college student? (0 = No; 1 = Yes)</li>
+<li><code>nontrad</code>: Is the student a non-traditional student (older than 19 years old at the time of freshman enrollment)? (0 = No; 1 = Yes)</li>
 </ul>
 </div>
 <div id="mn-schools" class="section level2 unnumbered">
@@ -478,6 +492,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>party</code>: Political party affiliation</li>
 </ul>
 </div>
+<div id="same-sex-marriage" class="section level2 unnumbered">
+<h2>same-sex-marriage.csv</h2>
+<p>This file contains data collected from the 2008 American National Election Study conducted jointly by the University of Michigan and Stanford University. These particular data consist of <span class="math inline">\(n=1,746\)</span> American’s responses. The attributes in the dataset include:</p>
+<ul>
+<li><code>support</code>: Does the respondent support gay marriage? (1=Yes; 0=No)</li>
+<li><code>attendance</code>: How often does the respondent attend religious services? (0=Never; 1=Few times a year; 2=Once or twice a month; 3=Almost every week; 4=Every week)</li>
+<li><code>denomination</code>: What is the respondent’s religious denomination?</li>
+<li><code>friends</code>: Does the respondent have family or friends that are LGBT? (1=Yes; 0=No)</li>
+<li><code>age</code>: Respondent’s age, in years</li>
+<li><code>female</code>: Is the respondent female? (1=Yes; 0=No)</li>
+</ul>
+</div>
 <div id="vocabulary" class="section level2 unnumbered">
 <h2>vocabulary.csv</h2>
 <p>The data, adapted from data provided by <span class="citation">Bock (<a href="#ref-Bock:1975">1975</a>)</span>, come from the Laboratory School of the University of Chicago and include scaled test scores across four grades from the vocabulary section of the Cooperative Reading Test for <span class="math inline">\(n=64\)</span> students. The attributes in the dataset include:</p>
@@ -508,6 +534,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="refs" class="references">
 <div id="ref-USNWR:2018">
 <p>U.S. News and World Report. (2018). Schools of education. <em>Best Graduate Schools</em>.</p>
+</div>
+<div id="ref-Jones-White:2014">
+<p>Jones-White, D. R., Radcliffe, P. M., Lorenz, L. M., &amp; Soria, K. M. (2014). Priced out?: The influence of financial aid on the educational trajectories of first-year students starting college at a large research university. <em>Research in Higher Education</em>, <em>55</em>(4), 329–350.</p>
 </div>
 <div id="ref-Woltman:2012">
 <p>Woltman, H., Feldstein, A., MacKay, J. C., &amp; Rocchi, M. (2012). An introduction to hierarchical linear modeling. <em>Tutorials in Quantitative Methods for Psychology</em>, <em>8</em>(1), 52–69.</p>
